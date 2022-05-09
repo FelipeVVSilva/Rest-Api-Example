@@ -1,12 +1,14 @@
 package com.felipeveiga.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.felipeveiga.domain.Categoria;
 import com.felipeveiga.repositories.CategoriaRepository;
+import com.felipeveiga.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -19,4 +21,9 @@ public class CategoriaService {
 		return list;
 	}
 	
+	public Categoria findById(Integer id){
+		Optional<Categoria> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Id informado não existe: " + id + 
+				", Tipo: " + Categoria.class.getName()));
+	}
 }
