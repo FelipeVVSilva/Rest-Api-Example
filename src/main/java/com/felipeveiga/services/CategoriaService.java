@@ -34,4 +34,14 @@ public class CategoriaService {
 		obj.setId(null);
 		return repo.save(obj);
 	}
+	
+	public Categoria update(Categoria obj) {
+		Categoria newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+	
+	public void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+	}
 }
