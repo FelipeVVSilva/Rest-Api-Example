@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.felipeveiga.domain.Categoria;
+import com.felipeveiga.domain.Produto;
 import com.felipeveiga.domain.dto.CategoriaDTO;
 import com.felipeveiga.repositories.CategoriaRepository;
 import com.felipeveiga.services.exceptions.DataIntegrityViolationException;
@@ -50,14 +51,18 @@ public class CategoriaService {
 		newObj.setNome(obj.getNome());
 	}
 	
-	@Transactional
+	//@Transactional
 	public void delete(Integer id) {
-		findById(id);
+		Categoria obj = findById(id);
+		List<Produto> produtos = obj.getProdutos();
 		try {
+			if(produtos != null) {
+				throw new DataIntegrityViolationException("Não é possível excluir uma Categoria que pussui produtos");
+			}
 			repo.deleteById(id);
 		}
 		catch(DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Não é possível excluir uma Categoria que pussui produtos");
+			throw new DataIntegrityViolationException(e.getMessage());
 		}
 	}
 	
