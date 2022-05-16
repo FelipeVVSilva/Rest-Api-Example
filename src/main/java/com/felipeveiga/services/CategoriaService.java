@@ -51,7 +51,6 @@ public class CategoriaService {
 		newObj.setNome(obj.getNome());
 	}
 	
-	@Transactional
 	public void delete(Integer id) {
 		Categoria obj = findById(id);
 		List<Produto> produtos = obj.getProdutos();

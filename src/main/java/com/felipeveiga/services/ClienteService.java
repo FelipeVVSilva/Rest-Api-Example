@@ -11,10 +11,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.felipeveiga.domain.Cidade;
 import com.felipeveiga.domain.Cliente;
+import com.felipeveiga.domain.Endereco;
 import com.felipeveiga.domain.Pedido;
 import com.felipeveiga.domain.dto.ClienteDTO;
+import com.felipeveiga.domain.dto.ClienteNewDTO;
+import com.felipeveiga.domain.enums.TipoCliente;
 import com.felipeveiga.repositories.ClienteRepository;
+import com.felipeveiga.repositories.EnderecoRepository;
 import com.felipeveiga.services.exceptions.DataIntegrityViolationException;
 import com.felipeveiga.services.exceptions.ObjectNotFoundException;
 
@@ -23,6 +28,9 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository repo;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public List<Cliente> findAll() {
 		List<Cliente> list = repo.findAll();
@@ -38,7 +46,9 @@ public class ClienteService {
 	@Transactional
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
-		return repo.save(obj);
+		obj = repo.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		return obj;
 	}
 	
 	public Cliente update(Cliente obj) {
@@ -52,7 +62,6 @@ public class ClienteService {
 		newObj.setEmail(obj.getEmail());
 	}
 	
-	@Transactional
 	public void delete(Integer id) {
 		Cliente obj = findById(id);
 		List<Pedido> pedidos = obj.getPedidos();
@@ -74,5 +83,20 @@ public class ClienteService {
 	
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
+	}
+	
+	public Cliente fromDTO(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
+		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		cli.getEnderecos().add(end);
+		cli.getTelefones().add(objDto.getTelefone1());
+		if(objDto.getTelefone2() != null) {
+			cli.getTelefones().add(objDto.getTelefone2());
+		}
+		if(objDto.getTelefone3() != null) {
+			cli.getTelefones().add(objDto.getTelefone3());
+		}
+		return cli;
 	}
 }
