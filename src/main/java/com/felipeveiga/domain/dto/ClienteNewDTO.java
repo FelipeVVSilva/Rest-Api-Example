@@ -2,20 +2,45 @@ package com.felipeveiga.domain.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.felipeveiga.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@NotEmpty(message = "Campo nome não pode ser vazio")
+	@Length(min = 5, max =120, message = "O tamnho deve ser entre 5 e 80 caracteres")
 	private String nome;
+	
+	@Email(message = "Email inválido")
+	@NotEmpty(message = "Campo email não pode ser vazio")
+	@Length(min = 5, max =80, message = "O tamnho deve ser entre 5 e 80 caracteres")
 	private String email;
+	
+	@NotEmpty(message = "Campo Cpf ou Cnpf não pode ser vazio")
 	private String cpfOuCnpj;
+	
 	private Integer tipo;
 	
+	@NotEmpty(message = "Campo logradouro não pode ser vazio")
 	private String logradouro;
+	
+	@NotEmpty(message = "Campo numero não pode ser vazio")
 	private String numero;
 	private String complemento;
+	
+	@NotEmpty(message = "Campo bairro não pode ser vazio")
 	private String bairro;
+	
+	@NotEmpty(message = "Campo email não pode ser vazio")
 	private String cep;
 	
+	@NotEmpty(message = "Campo telefone não pode ser vazio")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
