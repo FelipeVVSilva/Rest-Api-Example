@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.felipeveiga.domain.Categoria;
 import com.felipeveiga.repositories.CategoriaRepository;
+import com.felipeveiga.services.exceptions.DataIntegrityViolationException;
 import com.felipeveiga.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -43,5 +44,16 @@ public class CategoriaService {
 	
 	public void updateData(Categoria newObj, Categoria obj) {
 		newObj.setNome(obj.getNome());
+	}
+	
+	@Transactional
+	public void delete(Integer id) {
+		findById(id);
+		try {
+			repo.deleteById(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Não é possível excluir uma Categoria que pussui produtos");
+		}
 	}
 }
