@@ -1,8 +1,10 @@
 package com.felipeveiga.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -43,6 +45,14 @@ public class Pedido implements Serializable{
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 
+	public Double getValorTotal() {
+		double soma = 0;
+		for(ItemPedido x : itens) {
+			soma += x.getSubtotal();
+		}
+		return soma;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -79,7 +89,7 @@ public class Pedido implements Serializable{
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
-
+	
 	public Pedido() {
 		
 	}
