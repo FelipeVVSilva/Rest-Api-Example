@@ -11,7 +11,7 @@ import com.felipeveiga.domain.PagamentoComCartao;
 @Configuration
 public class JacksonConfig {
 // https://stackoverflow.com/questions/41452598/overcome-can-not-construct-instance-ofinterfaceclass-without-hinting-the-pare
-	
+	//É udaso para declacra se o pagamento é com boleto ou cartão
 	@Bean
 	public Jackson2ObjectMapperBuilder objectMapperBuilder() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder() {
