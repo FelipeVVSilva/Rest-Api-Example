@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		this.authenticationManager = authenticationManager;
 	}
 
-
+	//Autentica usuário
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req,
 												HttpServletResponse res) throws AuthenticationException{

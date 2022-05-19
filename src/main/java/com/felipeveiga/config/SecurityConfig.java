@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,7 +23,7 @@ import com.felipeveiga.domain.security.JWTAuthenticationFilter;
 import com.felipeveiga.domain.security.JWTAuthorizationFilter;
 import com.felipeveiga.domain.security.JWTUtil;
 
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -40,7 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] PUBLIC_MACHES_GET = {
 			"/categorias/**",
-			"/produtos/**",
+			"/produtos/**"
+	};
+	
+	private static final String[] PUBLIC_MACHES_POST = {
 			"/clientes/**"
 	};
 	
@@ -56,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 			.antMatchers(PUBLIC_MACHES).permitAll()
 			.antMatchers(HttpMethod.GET, PUBLIC_MACHES_GET).permitAll()
+			.antMatchers(HttpMethod.POST, PUBLIC_MACHES_POST).permitAll()
 			.anyRequest().authenticated();
 		//Fala qual é o filtro de autenticação e qualo gerador de Token
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
