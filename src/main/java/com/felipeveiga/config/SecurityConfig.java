@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.felipeveiga.domain.security.JWTAuthenticationFilter;
+import com.felipeveiga.domain.security.JWTAuthorizationFilter;
 import com.felipeveiga.domain.security.JWTUtil;
 
 
@@ -56,7 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(PUBLIC_MACHES).permitAll()
 			.antMatchers(HttpMethod.GET, PUBLIC_MACHES_GET).permitAll()
 			.anyRequest().authenticated();
-		http.addFilter(new JWTAuthenticationFilter(jwtUtil, authenticationManager()));
+		//Fala qual é o filtro de autenticação e qualo gerador de Token
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
