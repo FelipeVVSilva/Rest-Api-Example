@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.felipeveiga.domain.Categoria;
 import com.felipeveiga.domain.Pedido;
-import com.felipeveiga.domain.dto.CategoriaDTO;
 import com.felipeveiga.services.PedidoService;
 
 @RestController
@@ -51,5 +49,4 @@ public class PedidoResource {
 		Page<Pedido> list = service.findPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(list);
 	}
-	
 }

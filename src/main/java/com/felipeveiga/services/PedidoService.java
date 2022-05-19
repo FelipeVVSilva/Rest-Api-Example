@@ -76,6 +76,6 @@ public class PedidoService {
 		}
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Cliente cli = clienteService.findById(user.getId());
-		return repo.findByCliente(cli, pageRequest);	
+		return repo.findByCliente(cli, pageRequest);
 	}
 }
