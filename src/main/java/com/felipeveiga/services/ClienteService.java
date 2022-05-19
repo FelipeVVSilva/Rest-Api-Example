@@ -18,9 +18,12 @@ import com.felipeveiga.domain.Endereco;
 import com.felipeveiga.domain.Pedido;
 import com.felipeveiga.domain.dto.ClienteDTO;
 import com.felipeveiga.domain.dto.ClienteNewDTO;
+import com.felipeveiga.domain.enums.Perfil;
 import com.felipeveiga.domain.enums.TipoCliente;
+import com.felipeveiga.domain.security.UserSS;
 import com.felipeveiga.repositories.ClienteRepository;
 import com.felipeveiga.repositories.EnderecoRepository;
+import com.felipeveiga.services.exceptions.AuthorizationException;
 import com.felipeveiga.services.exceptions.DataIntegrityViolationException;
 import com.felipeveiga.services.exceptions.ObjectNotFoundException;
 
@@ -42,6 +45,11 @@ public class ClienteService {
 	}
 	
 	public Cliente findById(Integer id) {
+		UserSS user = UserService.authenticaeted();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Id informado não existe: " + id + 
 				", Tipo: " + Cliente.class.getName()));
